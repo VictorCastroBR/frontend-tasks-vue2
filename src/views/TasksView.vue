@@ -15,6 +15,7 @@
         </v-row>
         <v-btn color="primary" class="mr-2" @click="fetchTasks">Filtrar</v-btn>
         <v-btn color="secondary" :to="{ name:'task-new' }">Nova Tarefa</v-btn>
+        <v-btn color="success" class="ml-2" @click="exportTasks" :loading="exporting">Exportar CSV</v-btn>
       </v-card-text>
     </v-card>
 
@@ -87,6 +88,49 @@ export default {
       if (!confirm('Excluir essa tarefa?')) return
       await api.delete(`/tasks/${task.id}`)
       this.fetchTasks()
+    },
+    async downloadExport(id) {
+      try {
+        const { data } = await api.get(`/exports/${id}/download`, { responseType: 'blob' })
+        const blobUrl = window.URL.createObjectURL(new Blob([data]))
+        const link = document.createElement('a')
+        link.href = blobUrl
+        link.setAttribute('download', `tasks_${new Date().toISOString().slice(0,10)}.csv`)
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+        window.URL.revokeObjectURL(blobUrl)
+      } catch (e) {
+        alert('Falha ao baixar exportação')
+      }
+    },
+    async exportTasks() {
+      this.exporting = true
+      try {
+        const { data } = await api.post('/exports')
+        const exportId = data.export.id
+
+        this.exportStatus = 'queued'
+
+        this.exportInterval = setInterval(async () => {
+          const { data: statusResp } = await api.get(`/exports/${exportId}`)
+          this.exportStatus = statusResp.status
+          if (statusResp.status === 'done') {
+            clearInterval(this.exportInterval)
+            await this.downloadExport(statusResp.id)
+            this.exporting = false
+          }
+          if (statusResp.status === 'failed') {
+            clearInterval(this.exportInterval)
+            alert('Falha ao gerar exportação.')
+            this.exporting = false
+          }
+        }, 2000)
+      } catch (e) {
+        console.error(e)
+        alert('Erro ao solicitar exportação.')
+        this.exporting = false
+      }
     }
   }
 }
