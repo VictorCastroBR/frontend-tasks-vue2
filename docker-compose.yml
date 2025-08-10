@@ -1,0 +1,16 @@
+services:
+  frontend:
+    build: .
+    container_name: vue2_frontend
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+    environment:
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+volumes:
+  node_modules:
