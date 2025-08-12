@@ -1,16 +1,16 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <v-toolbar-title>Tasks App</v-toolbar-title>
-      <v-spacer />
-      <div v-if="isAuth" class="mr-4">
-        <v-chip small class="mr-2" color="white" text-color="primary">
-          {{ company }}
-        </v-chip>
-        <span>{{ user?.name }}</span>
-      </div>
-      <v-btn v-if="isAuth" text @click="handleLogout">Sair</v-btn>
-    </v-app-bar>
+    <AppHeader
+      :user="user"
+      :company="company"
+      @toggle-drawer="drawer = !drawer"
+      @logout="handleLogout"
+    />
+
+    <AppSidebar
+      v-model="drawer"
+      :items="navItems"
+    />
 
     <v-main>
       <v-container class="py-6">
@@ -23,9 +23,20 @@
 <script>
 import auth from '@/store/auth'
 import api from '@/services/api'
+import AppHeader from '@/components/App/AppHeader.vue'
+import AppSidebar from '@/components/App/AppSidebar.vue'
 
 export default {
   name: 'App',
+  components: { AppHeader, AppSidebar },
+  data: () => ({
+    drawer: true,
+    navItems: [
+      { title: 'Dashboard',  icon: 'mdi-view-dashboard-outline', to: '/' },
+      { title: 'Nova Tarefa', icon: 'mdi-plus-circle-outline', to: 'task-new' },
+      { title: 'Equipe',      icon: 'mdi-account-group-outline',to: 'equipe' },
+    ],
+  }),
   computed: {
     isAuth() { return !!auth.state.token },
     user() { return auth.state.user },
@@ -33,11 +44,7 @@ export default {
   },
   methods: {
     async handleLogout() {
-      try {
-        await api.post('/auth/logout')
-      } catch (e) {
-        console.error(e)
-      }
+      try { await api.post('/auth/logout') } catch (e) { console.error(e) }
       auth.actions.logout()
       this.$router.push('/login')
     }

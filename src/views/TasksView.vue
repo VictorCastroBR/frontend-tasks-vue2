@@ -108,24 +108,25 @@ export default {
       this.exporting = true
       try {
         const { data } = await api.post('/exports')
-        const exportId = data.export.id
 
-        this.exportStatus = 'queued'
+        return data;
 
-        this.exportInterval = setInterval(async () => {
-          const { data: statusResp } = await api.get(`/exports/${exportId}`)
-          this.exportStatus = statusResp.status
-          if (statusResp.status === 'done') {
-            clearInterval(this.exportInterval)
-            await this.downloadExport(statusResp.id)
-            this.exporting = false
-          }
-          if (statusResp.status === 'failed') {
-            clearInterval(this.exportInterval)
-            alert('Falha ao gerar exportação.')
-            this.exporting = false
-          }
-        }, 2000)
+        // this.exportStatus = 'queued'
+
+        // this.exportInterval = setInterval(async () => {
+        //   const { data: statusResp } = await api.get(`/exports/${exportId}`)
+        //   this.exportStatus = statusResp.status
+        //   if (statusResp.status === 'done') {
+        //     clearInterval(this.exportInterval)
+        //     await this.downloadExport(statusResp.id)
+        //     this.exporting = false
+        //   }
+        //   if (statusResp.status === 'failed') {
+        //     clearInterval(this.exportInterval)
+        //     alert('Falha ao gerar exportação.')
+        //     this.exporting = false
+        //   }
+        // }, 2000)
       } catch (e) {
         console.error(e)
         alert('Erro ao solicitar exportação.')

@@ -11,8 +11,8 @@ const routes = [
   { path: '/login', name: 'login', component: LoginView, meta: { public: true } },
   { path: '/', redirect: '/tasks' },
   { path: '/tasks', name: 'tasks', component: TasksView },
-  { path: '/tasks/new', name: 'task-new', component: TaskFormView },
-  { path: '/tasks/:id/edit', name: 'task-edit', component: TaskFormView, props: true },
+  { path: '/tarefa/nova', name: 'task-new', component: TaskFormView },
+  { path: '/tarefa/:id/editar', name: 'task-edit', component: TaskFormView, props: true },
   { path: '*', redirect: '/tasks' }
 ]
 
