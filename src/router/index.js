@@ -8,7 +8,7 @@ import TaskFormView from '@/views/TaskFormView.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/login', name: 'login', component: LoginView, meta: { public: true } },
+  { path: '/login', name: 'login', component: LoginView, meta: { public: true, guest: true, hideChrome: true } },
   { path: '/', redirect: '/tasks' },
   { path: '/tasks', name: 'tasks', component: TasksView },
   { path: '/tarefa/nova', name: 'task-new', component: TaskFormView },
@@ -22,9 +22,16 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (!to.meta.public && !auth.getters.isAuthenticated()) {
-    return next({ name: 'login' })
+  const isAuth = auth.getters.isAuthenticated()
+
+  if (!to.meta.public && !isAuth) {
+    return next({ name: 'login', query: { redirect: to.fullPath } })
   }
+
+  if (to.meta.guest && isAuth) {
+    return next({ name: 'tasks' })
+  }
+
   next()
 })
 

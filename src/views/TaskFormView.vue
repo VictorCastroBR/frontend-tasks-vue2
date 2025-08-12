@@ -7,10 +7,10 @@
         <v-textarea v-model="form.description" label="Descrição" rows="3" />
         <v-row>
           <v-col cols="12" sm="6">
-            <v-select v-model="form.status" :items="statusItems" label="Status" />
+            <v-select v-model="form.status" :items="statusItems" label="Status" item-text="title" item-value="value" />
           </v-col>
           <v-col cols="12" sm="6">
-            <v-select v-model="form.priority" :items="priorityItems" label="Prioridade" />
+            <v-select v-model="form.priority" :items="priorityItems" label="Prioridade" item-text="title" item-value="value" />
           </v-col>
         </v-row>
         <v-text-field v-model="form.due_date" label="Prazo (YYYY-MM-DD)" placeholder="2025-08-15" />
@@ -31,8 +31,8 @@ export default {
     loading: false,
     error: '',
     form: { title:'', description:'', status:'pending', priority:'medium', due_date:'' },
-    statusItems: ['pending','doing','done'],
-    priorityItems: ['low','medium','high']
+    statusItems: [{ title: 'Pendente', value: 'pending' }, { title: 'Fazendo', value: 'doing' }, {  title: 'Concluído', value: 'done' }],
+    priorityItems: [{ title: 'Baixa', value: 'low' }, { title: 'Média', value: 'medium' }, { title: 'Alta', value: 'high' }]
   }),
   computed: { isEdit() { return !!this.$route.params.id } },
   created() { if (this.isEdit) this.fetchOne() },

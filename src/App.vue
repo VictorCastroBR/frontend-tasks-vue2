@@ -3,6 +3,7 @@
     <AppHeader
       :user="user"
       :company="company"
+      v-if="!hideChrome"
       @toggle-drawer="drawer = !drawer"
       @logout="handleLogout"
     />
@@ -10,6 +11,7 @@
     <AppSidebar
       v-model="drawer"
       :items="navItems"
+      v-if="!hideChrome"
     />
 
     <v-main>
@@ -40,7 +42,11 @@ export default {
   computed: {
     isAuth() { return !!auth.state.token },
     user() { return auth.state.user },
-    company() { return auth.getters.companyName() }
+    company() { return auth.getters.companyName() },
+    hideChrome () {
+      const metaHide = this.$route && this.$route.meta && this.$route.meta.hideChrome
+      return metaHide || !auth.getters.isAuthenticated()
+    }
   },
   methods: {
     async handleLogout() {
