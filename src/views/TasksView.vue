@@ -1,23 +1,13 @@
 <template>
   <div>
-    <v-card class="mb-4">
-      <v-card-text>
-        <v-row dense>
-          <v-col cols="12" sm="4">
-            <v-select :items="statusItems" v-model="filters.status" label="Status" clearable dense />
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-select :items="priorityItems" v-model="filters.priority" label="Prioridade" clearable dense />
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-text-field v-model="filters.search" label="Buscar" dense clearable />
-          </v-col>
-        </v-row>
-        <v-btn color="primary" class="mr-2" @click="fetchTasks">Filtrar</v-btn>
-        <v-btn color="secondary" :to="{ name:'task-new' }">Nova Tarefa</v-btn>
-        <v-btn color="success" class="ml-2" @click="exportTasks" :loading="exporting">Exportar CSV</v-btn>
-      </v-card-text>
-    </v-card>
+    <TaskFiltersBar
+      :filters.sync="filters"
+      :status-items="statusItems"
+      :priority-items="priorityItems"
+      :exporting="exporting"
+      @filter="fetchTasks"
+      @export="exportTasks"
+    />
 
     <v-card>
       <v-simple-table>
@@ -58,9 +48,13 @@
 
 <script>
 import api from '@/services/api'
+import TaskFiltersBar from '@/components/Tasks/TaskFiltersBar.vue'
 
 export default {
+  components: { TaskFiltersBar },
   data: () => ({
+    loading: false,
+    exporting: false,
     tasks: [],
     page: 1,
     perPage: 10,
@@ -68,6 +62,7 @@ export default {
     filters: { status: null, priority: null, search: '' },
     statusItems: ['pending','doing','done'],
     priorityItems: ['low','medium','high']
+
   }),
   created() { this.fetchTasks() },
   methods: {
@@ -110,29 +105,16 @@ export default {
         const { data } = await api.post('/exports')
 
         return data;
-
-        // this.exportStatus = 'queued'
-
-        // this.exportInterval = setInterval(async () => {
-        //   const { data: statusResp } = await api.get(`/exports/${exportId}`)
-        //   this.exportStatus = statusResp.status
-        //   if (statusResp.status === 'done') {
-        //     clearInterval(this.exportInterval)
-        //     await this.downloadExport(statusResp.id)
-        //     this.exporting = false
-        //   }
-        //   if (statusResp.status === 'failed') {
-        //     clearInterval(this.exportInterval)
-        //     alert('Falha ao gerar exportação.')
-        //     this.exporting = false
-        //   }
-        // }, 2000)
       } catch (e) {
         console.error(e)
         alert('Erro ao solicitar exportação.')
         this.exporting = false
       }
-    }
+    },
+     onFilter () {
+      this.page = 1
+      this.fetchTasks()
+    },
   }
 }
 </script>
