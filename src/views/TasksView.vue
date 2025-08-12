@@ -9,7 +9,7 @@
       @export="exportTasks"
     />
 
-    <v-card>
+    <v-card class="mt-4" outlined>
       <v-simple-table>
         <thead>
           <tr>

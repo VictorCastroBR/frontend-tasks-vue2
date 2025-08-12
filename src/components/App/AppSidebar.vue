@@ -147,8 +147,7 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* base clarinha derivada da primary */
-  background: color-mix(in srgb, var(--v-primary-base) 12%, #ffffff);
+  background: color-mix(in srgb, var(--v-primary-base) 20%, #ffffff);
   color: var(--v-primary-base);
   transition: background 160ms ease, color 160ms ease;
 }

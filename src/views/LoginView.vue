@@ -12,7 +12,6 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <small class="grey--text">Use o usuário criado no seed/command.</small>
         </v-card-actions>
       </v-card>
     </v-col>

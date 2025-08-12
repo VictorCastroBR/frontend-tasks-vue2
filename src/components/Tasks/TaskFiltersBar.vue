@@ -1,36 +1,8 @@
 <template>
-  <v-card class="mb-4 elevation-1">
+  <v-card class="mb-4 elevation-0">
     <v-card-text class="py-3">
       <v-row dense align="end">
-        <v-col cols="12" sm="4">
-          <v-select
-            :items="statusItems"
-            v-model="localFilters.status"
-            label="Status"
-            clearable
-            dense
-            outlined
-            hide-details="auto"
-            :menu-props="{ offsetY: true }"
-            prepend-inner-icon="mdi-check-circle-outline"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="4">
-          <v-select
-            :items="priorityItems"
-            v-model="localFilters.priority"
-            label="Prioridade"
-            clearable
-            dense
-            outlined
-            hide-details="auto"
-            :menu-props="{ offsetY: true }"
-            prepend-inner-icon="mdi-flag-outline"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="6">
           <v-text-field
             v-model="localFilters.search"
             label="Buscar"
@@ -38,25 +10,53 @@
             outlined
             clearable
             hide-details="auto"
-            prepend-inner-icon="mdi-magnify"
+            append-icon="mdi-magnify"
             @keyup.enter="emitFilter"
           />
         </v-col>
 
+        <v-col cols="12" sm="3">
+          <v-select
+            :items="statusItems"
+            v-model="localFilters.status"
+            label="Status"
+            clearable
+            outlined
+            dense
+            hide-details="auto"
+            append-icon="mdi-magnify"
+            :menu-props="{ offsetY: true }"
+          />
+        </v-col>
+
+        <v-col cols="12" sm="3">
+          <v-select
+            :items="priorityItems"
+            v-model="localFilters.priority"
+            label="Prioridade"
+            clearable
+            outlined
+            dense
+            hide-details="auto"
+            :menu-props="{ offsetY: true }"
+          />
+        </v-col>
+
         <v-col cols="12" class="d-flex align-center justify-end mt-1">
-          <v-btn small color="primary" class="mr-2" @click="emitFilter">
+          <v-btn small depressed color="primary" class="mr-2" @click="emitFilter">
             <v-icon left small>mdi-filter-variant</v-icon>
             Filtrar
           </v-btn>
 
-          <v-btn small color="secondary" :to="{ name: newTaskRouteName }">
+          <v-btn small color="primary" depressed :to="{ name: newTaskRouteName }">
             <v-icon left small>mdi-plus</v-icon>
             Nova Tarefa
           </v-btn>
 
           <v-btn
             small
-            color="success"
+            depressed
+            color="primary"
             class="ml-2"
             @click="$emit('export')"
             :loading="exporting"
