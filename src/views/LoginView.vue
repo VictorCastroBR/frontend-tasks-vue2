@@ -12,6 +12,7 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
+          Não possui uma conta? <v-btn text :to="{ name: 'register' }">Registrar</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>

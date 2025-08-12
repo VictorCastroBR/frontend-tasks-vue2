@@ -35,7 +35,7 @@ export default {
     drawer: true,
     navItems: [
       { title: 'Dashboard',  icon: 'mdi-view-dashboard-outline', to: '/' },
-      { title: 'Nova Tarefa', icon: 'mdi-plus-circle-outline', to: 'task-new' },
+      { title: 'Nova Tarefa', icon: 'mdi-plus-circle-outline', to: 'tarefa/nova' },
       { title: 'Equipe',      icon: 'mdi-account-group-outline',to: 'equipe' },
     ],
   }),

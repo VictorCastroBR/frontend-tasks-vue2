@@ -4,16 +4,22 @@ import auth from '@/store/auth'
 import LoginView from '@/views/LoginView.vue'
 import TasksView from '@/views/TasksView.vue'
 import TaskFormView from '@/views/TaskFormView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import TeamView from '@/views/TeamView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/login', name: 'login', component: LoginView, meta: { public: true, guest: true, hideChrome: true } },
+  { path: '/register', name: 'register', component: RegisterView, meta: { public: true, guest: true, hideChrome: true } },
+  
   { path: '/', redirect: '/tasks' },
   { path: '/tasks', name: 'tasks', component: TasksView },
   { path: '/tarefa/nova', name: 'task-new', component: TaskFormView },
   { path: '/tarefa/:id/editar', name: 'task-edit', component: TaskFormView, props: true },
-  { path: '*', redirect: '/tasks' }
+  { path: '*', redirect: '/tasks' },
+
+  { path: '/equipe', name: 'team', component: TeamView },
 ]
 
 const router = new VueRouter({
