@@ -54,7 +54,7 @@
             <div class="text-caption mb-2 grey--text text--darken-1">Status</div>
             <v-chip-group
               v-model="form.status"
-              active-class="primary white--text"
+              active-class="primary"
               column
               class="d-flex flex-wrap"
               mandatory
@@ -77,7 +77,7 @@
             <div class="text-caption mb-2 grey--text text--darken-1">Prioridade</div>
             <v-chip-group
               v-model="form.priority"
-              active-class="primary white--text"
+              active-class="primary"
               column
               class="d-flex flex-wrap"
               mandatory
