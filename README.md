@@ -37,6 +37,8 @@ npm install
 npm run serve
 ```
 
+## 🐋 Instalação (Com Docker)
+
 ```bash
 git clone https://github.com/VictorCastroBR/frontend-tasks-vue2.git
 cd frontend-tasks-vue2
