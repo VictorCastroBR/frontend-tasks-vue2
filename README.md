@@ -1,6 +1,3 @@
-## **3️⃣ README frontend (Vue 2 + Vuetify)**
-
-```md
 # 💻 Frontend – Tasks App (Vue 2 + Vuetify)
 
 Interface web para o App de Tarefas, consumindo a API Laravel 8.
