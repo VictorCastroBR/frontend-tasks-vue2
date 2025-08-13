@@ -1,27 +1,35 @@
 <template>
   <div>
-    <v-card class="mb-3">
-      <v-card-title>Equipe</v-card-title>
-      <v-card-actions>
-        <v-btn color="primary" @click="openCreate">Novo usuário</v-btn>
-      </v-card-actions>
+    <v-card class="rounded-xl elevation-2 mb-4">
+      <v-toolbar flat color="transparent" class="px-4">
+        <v-toolbar-title class="text-h6 font-weight-bold">Equipe</v-toolbar-title>
+        <v-spacer />
+        <v-text-field
+          v-model.trim="search"
+          prepend-inner-icon="mdi-magnify"
+          label="Buscar por nome ou e-mail"
+          dense
+          outlined
+          hide-details
+          clearable
+          class="mr-4"
+          style="max-width: 320px"
+        />
+        <v-btn color="primary" depressed :to="{ name: 'user-new' }">
+          <v-icon left>mdi-account-plus</v-icon>
+          Novo usuário
+        </v-btn>
+      </v-toolbar>
     </v-card>
 
-    <TeamTable
-      :users="users"
-      :loading="loading"
-      @edit="openEdit"
-      @change-password="openChangePassword"
-    />
-
-    <UserDialog
-      v-model="userDlg.open"
-      :mode="userDlg.mode"
-      :user="userDlg.user"
-      :loading="userDlg.loading"
-      :error="userDlg.error"
-      @save="saveUser"
-    />
+    <v-card class="rounded-xl elevation-2">
+      <TeamTable
+        :users="filteredUsers"
+        :loading="loading"
+        @edit="goEdit"
+        @change-password="openChangePassword"
+      />
+    </v-card>
 
     <PasswordDialog
       v-model="pwdDlg.open"
@@ -37,17 +45,27 @@
 <script>
 import api from '@/services/api'
 import TeamTable from '@/components/Team/TeamTable.vue'
-import UserDialog from '@/components/Team/UserDialog.vue'
 import PasswordDialog from '@/components/Team/PasswordDialog.vue'
 
 export default {
-  components: { TeamTable, UserDialog, PasswordDialog },
+  name: 'TeamView',
+  components: { TeamTable, PasswordDialog },
   data: () => ({
     users: [],
     loading: false,
-    userDlg: { open: false, mode: 'create', user: null, loading: false, error: '' },
-    pwdDlg: { open: false, userId: null, loading: false, error: '', success: '' },
+    search: '',
+    pwdDlg: { open: false, userId: null, loading: false, error: '', success: '' }
   }),
+  computed: {
+    filteredUsers () {
+      const q = this.search.toLowerCase().trim()
+      if (!q) return this.users
+      return this.users.filter(u =>
+        String(u.name || '').toLowerCase().includes(q) ||
+        String(u.email || '').toLowerCase().includes(q)
+      )
+    }
+  },
   created () { this.fetch() },
   methods: {
     async fetch () {
@@ -55,29 +73,12 @@ export default {
       try {
         const { data } = await api.get('/company/users')
         this.users = data.data || data
-      } finally { this.loading = false }
+      } finally {
+        this.loading = false
+      }
     },
-    openCreate () {
-      this.userDlg = { open: true, mode: 'create', user: null, loading: false, error: '' }
-    },
-    openEdit (u) {
-      this.userDlg = { open: true, mode: 'edit', user: { ...u }, loading: false, error: '' }
-    },
-    async saveUser (payload) {
-      this.userDlg.loading = true
-      this.userDlg.error = ''
-      try {
-        if (this.userDlg.mode === 'create') {
-          await api.post('/company/users', payload)
-        } else {
-          const { id, ...rest } = payload
-          await api.put(`/company/users/${id}`, rest)
-        }
-        this.userDlg.open = false
-        await this.fetch()
-      } catch (e) {
-        this.userDlg.error = e?.response?.data?.message || 'Erro ao salvar'
-      } finally { this.userDlg.loading = false }
+    goEdit (u) {
+      this.$router.push({ name: 'user-edit', params: { id: u.id } })
     },
     openChangePassword (u) {
       this.pwdDlg = { open: true, userId: u.id, loading: false, error: '', success: '' }
@@ -100,7 +101,9 @@ export default {
         setTimeout(() => { this.pwdDlg.open = false }, 800)
       } catch (e) {
         this.pwdDlg.error = e?.response?.data?.message || 'Erro ao alterar a senha'
-      } finally { this.pwdDlg.loading = false }
+      } finally {
+        this.pwdDlg.loading = false
+      }
     }
   }
 }

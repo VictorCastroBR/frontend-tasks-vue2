@@ -6,6 +6,8 @@ import TasksView from '@/views/TasksView.vue'
 import TaskFormView from '@/views/TaskFormView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import TeamView from '@/views/TeamView.vue'
+import ExportView from '@/views/ExportView.vue'
+import UserFormView from '@/views/UserFormView.vue'
 
 Vue.use(VueRouter)
 
@@ -20,6 +22,11 @@ const routes = [
   { path: '*', redirect: '/tasks' },
 
   { path: '/equipe', name: 'team', component: TeamView },
+
+  { path: '/users/new', name: 'user-new', component: UserFormView },
+  { path: '/users/:id/edit', name: 'user-edit', component: UserFormView, props: true },
+
+  { path: '/exports/:uuid',  name: 'export', component: ExportView },
 ]
 
 const router = new VueRouter({

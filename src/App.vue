@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app-surface">
     <AppHeader
       :user="user"
       :company="company"

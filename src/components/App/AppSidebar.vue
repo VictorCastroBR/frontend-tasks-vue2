@@ -10,7 +10,7 @@
         <v-icon size="20">mdi-check</v-icon>
       </div>
       <div class="brand-text">
-        <div class="brand-title">TaskFlow</div>
+        <div class="brand-title">Tarefas</div>
         <div class="brand-sub">organize seu dia</div>
       </div>
       <v-spacer />
