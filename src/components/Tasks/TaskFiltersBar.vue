@@ -24,7 +24,6 @@
             outlined
             dense
             hide-details="auto"
-            append-icon="mdi-magnify"
             :menu-props="{ offsetY: true }"
           />
         </v-col>

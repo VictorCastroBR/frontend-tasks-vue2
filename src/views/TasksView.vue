@@ -112,7 +112,7 @@ export default {
     async exportTasks() {
       this.exporting = true
       try {
-        const { data } = await api.post('/exports')
+        const { data } = await api.post('/exports', { ...this.filters })
         return data
       } catch (e) {
         console.error(e)
