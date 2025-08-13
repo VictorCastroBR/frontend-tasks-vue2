@@ -1,3 +1,9 @@
+html, body, #app, .v-application {
+  height: 100%;
+  margin: 0;
+  background: transparent !important;
+}
+
 .v-text-field.v-text-field--outlined .v-input__control .v-input__slot,
 .v-text-field.v-text-field--outlined .v-input__control .v-input__slot fieldset {
   border-radius: 10px !important

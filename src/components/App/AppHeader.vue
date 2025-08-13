@@ -8,23 +8,17 @@
 
     <v-spacer />
 
-    <v-menu bottom left>
+    <v-menu bottom left offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn icon class="icon-btn" v-on="on">
+        <v-btn text class="user-btn" v-on="on">
           <v-avatar size="32" class="avatar">
             {{ initials(user && user.name) }}
           </v-avatar>
+          <span class="user-name d-none d-md-inline ms-1">{{ user?.name }}</span>
         </v-btn>
       </template>
 
       <v-list dense class="menu-list">
-        <v-list-item>
-          <v-list-item-title>Meu Perfil</v-list-item-title>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-title>Configurações</v-list-item-title>
-        </v-list-item>
-        <v-divider class="my-1" />
         <v-list-item @click="$emit('logout')">
           <v-list-item-title class="red--text text--darken-1">
             Sair
@@ -44,7 +38,12 @@ export default {
   },
   methods: {
     initials(name = '') {
-      return name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase()
+      return name
+        .split(' ')
+        .map(p => p[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase()
     }
   }
 }
@@ -52,30 +51,53 @@ export default {
 
 <style scoped>
 .app-header {
-  background: rgba(255, 255, 255, 0.75) !important;
-  backdrop-filter: saturate(180%) blur(8px);
-  border-bottom: 1px solid var(--v-theme-on-surface-variant);
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .title {
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.2px;
   color: var(--v-theme-on-surface);
+  font-size: 1rem;
 }
 
 .icon-btn {
-  border-radius: 10px !important;
+  border-radius: 8px !important;
+  transition: background 0.2s ease;
 }
 .icon-btn:hover {
   background: rgba(var(--v-theme-primary), 0.08) !important;
 }
 
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  border-radius: 8px;
+  padding: 0 8px;
+  text-transform: none;
+}
+.user-btn:hover {
+  background: rgba(var(--v-theme-primary), 0.05);
+}
+
 .avatar {
-  font-weight: 800;
+  font-weight: 700;
   color: #fff !important;
   background: linear-gradient(135deg, var(--v-primary-base), #7c4dff) !important;
-  box-shadow: 0 0 0 2px #fff,
-              0 6px 14px -6px rgba(51, 102, 255, 0.45);
+  box-shadow: 0 0 0 2px #fff, 0 4px 10px -4px rgba(51, 102, 255, 0.4);
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--v-theme-on-surface);
+  white-space: nowrap;
 }
 
 .menu-list {
@@ -83,7 +105,7 @@ export default {
   min-width: 180px;
 }
 .menu-list .v-list-item {
-  border-radius: 10px;
+  border-radius: 8px;
   margin: 2px 4px;
   transition: background 140ms ease;
 }
@@ -92,6 +114,6 @@ export default {
 }
 
 .v-divider {
-  border-color: var(--v-theme-on-surface-variant) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
 }
 </style>
